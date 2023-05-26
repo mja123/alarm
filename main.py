@@ -1,4 +1,5 @@
 import cv2
+import os
 import numpy as np
 from decouple import config
 
@@ -13,6 +14,7 @@ if not cap.isOpened():
     print('Cannot open RTSP stream')
     exit(-1)
 
+count = 1
 while True:
     ret, frame = cap.read()
     cv2.imshow('RTSP stream', frame)
@@ -27,23 +29,15 @@ while True:
 
     boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
-    for (xA, yA, xB, yB) in boxes:
-        # display the detected boxes in the colour picture
-        cv2.rectangle(frame, (xA, yA), (xB, yB),
-                      (0, 255, 0), 2)
+    if boxes.size > 0:
+        print(count)
+        os.system("./runAlarm.sh")
 
-    # Display the resulting frame
-    cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
 cv2.destroyAllWindows()
 
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     print('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
