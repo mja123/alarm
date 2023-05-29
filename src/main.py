@@ -26,7 +26,6 @@ while True:
 
     # detect people in the image
     # returns the bounding boxes for the detected objects
-    # boxes, weights = hog.detectMultiScale(frame, winStride=(16, 16), padding=(8, 8), scale=1.01)
     boxes, weights = hog.detectMultiScale(frame, winStride=(12, 12), padding=(8, 8), scale=1.1)
 
     boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
