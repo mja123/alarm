@@ -8,9 +8,10 @@ RTSP_URL = config('VIDEO_URL')
 # initialize the HOG descriptor/person detector
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-# cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
-cap = cv2.VideoCapture("./../XVR_ch4_main_20230519021800_20230519022524 (online-video-cutter.com).mp4")
 # cap = cv2.VideoCapture("./../XVR_ch4_main_20230526184600_20230526184700.asf")
+# cap = cv2.VideoCapture("./../securityCamera.mp4")
+cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
+# cap = cv2.VideoCapture("./../XVR_ch4_main_20230519021800_20230519022524 (online-video-cutter.com).mp4")
 if not cap.isOpened():
     print('Cannot open RTSP stream')
     exit(-1)
@@ -33,7 +34,7 @@ while True:
     if boxes.size > 0:
         print(count)
         count += 1
-        os.system("./../runAlarm.sh")
+        os.system("./runAlarm.sh")
 
     for (xA, yA, xB, yB) in boxes:
         # display the detected boxes in the colour picture
