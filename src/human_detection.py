@@ -30,7 +30,7 @@ class HumanDetection:
             if boxes.size > 0:
                 print(count)
                 count += 1
-                # os.system("./runAlarm.sh")
+                os.system("./../scripts/runAlarm.sh")
 
             for (xA, yA, xB, yB) in boxes:
                 cv2.rectangle(frame, (xA, yA), (xB, yB),
@@ -52,5 +52,4 @@ class HumanDetection:
 
 
 if __name__ == '__main__':
-    # HumanDetection(config('VIDEO_URL'), cv2.CAP_FFMPEG).detection()
-    HumanDetection('./XVR_ch4_main_20230519021800_20230519022524 (online-video-cutter.com).mp4').detection()
+    HumanDetection(config('VIDEO_URL'), cv2.CAP_FFMPEG).detection()
