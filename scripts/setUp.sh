@@ -27,8 +27,6 @@ function installAndroidTools() {
   export PATH=$PATH:$ANDROID_SDK/emulator
 }
 
-source ~/.zshrc
 getTools
 setEnvs
-source ~/.zshrc
 installAndroidTools
