@@ -1,6 +1,7 @@
 FROM --platform=linux/amd64 ubuntu:rolling
 
-RUN apt-get update && apt-get install -y python3.11 curl unzip openjdk-11-jdk expect libxdamage1/lunar pulseaudio libxcursor-dev/lunar libxcursor1:amd64 qemu-system-x86 libvirt-daemon-system libvirt-clients bridge-utils
+RUN apt-get update && apt-get install -y python3.11 curl unzip openjdk-11-jdk expect libxdamage1/lunar pulseaudio  \
+    libxcursor-dev/lunar libxcursor1:amd64 qemu-system-x86 libvirt-daemon-system libvirt-clients bridge-utils
 
 RUN curl https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -o cmd-tools
 
@@ -48,5 +49,3 @@ RUN bash -c "source moveFiles.sh; sdk_sorting"
 ENV PATH=$PATH:$ANDROID_SDK/emulator
 
 WORKDIR /project
-
-

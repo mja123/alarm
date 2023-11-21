@@ -4,3 +4,7 @@ venv
 .idea
 XVR*
 emulators
+*.pyc
+*.DS_Store
+__pycache__
+*.png

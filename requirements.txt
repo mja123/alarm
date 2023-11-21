@@ -1,2 +1,4 @@
 opencv-python
 python-decouple
+imutils
+pyautogui

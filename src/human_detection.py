@@ -1,12 +1,17 @@
 import cv2
 import os
+from imutils.object_detection import non_max_suppression
+from imutils import resize
 import time
 import numpy as np
+import pyautogui
 from decouple import config
 
 
 class HumanDetection:
-    def __init__(self, video, options=''):
+    alarm_integration: bool
+
+    def __init__(self, video, options='', alarm_integration=False):
         self.hog = cv2.HOGDescriptor()
         self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
         if options != '':
@@ -14,27 +19,34 @@ class HumanDetection:
         else:
             self.cap = cv2.VideoCapture(video)
         self.duration = self._calculate_duration()
+        self.alarm_integration = alarm_integration
 
-    def detection(self, winStride=(12, 12), padding=(8, 8), scale=1.1):
+    def detection(self, winStride=(7, 8), padding=(4, 4), scale=1.035):
         count = 0
         start = time.time()
-
         while True:
             ret, frame = self.cap.read()
             if frame is None:
                 break
-            frame = cv2.resize(frame, (640, 500))
+            frame = resize(frame, width=min(300, frame.shape[1]))
             boxes, weights = self.hog.detectMultiScale(frame, winStride=winStride, padding=padding, scale=scale)
             boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
             if boxes.size > 0:
+                image = pyautogui.screenshot()
+                image = cv2.cvtColor(np.array(image),
+                                     cv2.COLOR_RGB2BGR)
+                cv2.imwrite(f"image{count}.png", image)
                 print(count)
                 count += 1
-                os.system("./../scripts/runAlarm.sh")
+                if self.alarm_integration:
+                    os.system("./../scripts/runAlarm.sh")
 
-            for (xA, yA, xB, yB) in boxes:
+            pick = non_max_suppression(boxes, probs=None, overlapThresh=0.65)
+            for (xA, yA, xB, yB) in pick:
                 cv2.rectangle(frame, (xA, yA), (xB, yB),
                               (0, 255, 0), 2)
+
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -48,6 +60,7 @@ class HumanDetection:
         frames = self.cap.get(cv2.CAP_PROP_FRAME_COUNT)
         fps = self.cap.get(cv2.CAP_PROP_FPS)
         seconds = round(frames / fps)
+        print(f"Duration {seconds}")
         return seconds
 
 
